@@ -29,10 +29,6 @@ public class IdleState : State
                 stateMachine.ChangeState(player.walkState);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
-        {
-            stateMachine.ChangeState(player.jumpState);
-        }
     }
 }
 

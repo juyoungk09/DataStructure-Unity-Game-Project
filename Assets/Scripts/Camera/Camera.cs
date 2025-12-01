@@ -1,21 +1,23 @@
 using UnityEngine;
 
-public class CameraFollowX : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
-    public Transform target;     
-    public float smoothSpeed = 0f;    
-    public float offsetX = -3f;   
-    
+    public Transform[] stageCameraPositions; // 스테이지별 카메라 위치
+    private Transform targetPosition;
+
     void Start()
     {
-        GameObject Player = GameObject.FindGameObjectWithTag("Player");   
-        target = Player.GetComponent<Transform>();
+        UpdateCameraPosition(); // 시작 시 위치 맞춤
     }
-    void LateUpdate()
+
+    public void UpdateCameraPosition()
     {
-        Vector3 desiredPosition = new Vector3(target.position.x + offsetX, transform.position.y, transform.position.z);
-        
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
+        int stageIndex = GameManager.Instance.getStage() - 1; // 0부터 시작
+        if (stageIndex >= 0 && stageIndex < stageCameraPositions.Length)
+        {
+            targetPosition = stageCameraPositions[stageIndex];
+            // 순간 이동
+            transform.position = targetPosition.position;
+        }
     }
 }

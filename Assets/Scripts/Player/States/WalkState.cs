@@ -25,10 +25,6 @@ public class WalkState : State
         {
             stateMachine.ChangeState(player.runState);
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && player.isGrounded)
-        {
-            stateMachine.ChangeState(player.jumpState);
-        }
     }
 
     public override void PhysicsUpdate()
@@ -37,7 +33,7 @@ public class WalkState : State
         float targetVelocityX = player.moveInput * player.moveSpeed;
         player.rb.linearVelocity = new Vector2(targetVelocityX, player.rb.linearVelocity.y);
     }
-
+    
     public override void Exit()
     {
         base.Exit();
