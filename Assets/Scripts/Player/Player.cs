@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -154,9 +155,16 @@ public class Player : MonoBehaviour
             return;
         }
         Debug.Log("민기 죽는다");
+        StartCoroutine(DamageFlash());
         HP -= damage;
         if (HP <= 0) Die();
     }
+    private IEnumerator DamageFlash() {
+        Color originalColor = sr.color;
+        sr.color = Color.red;
+        yield return new WaitForSeconds(0.1f);
+        sr.color = originalColor;
+    }   
     void Jump() {
         if (isGrounded && Time.time > lastJumpTime + jumpCooldown) {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0);

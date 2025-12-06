@@ -8,32 +8,41 @@
 // {
 //     public static AudioManager Instance { get; private set; }
 
-//     [Header("Audio Sources")]
-//     [SerializeField] private AudioSource _musicSource;
-//     [SerializeField] private AudioSource _sfxSource;
-//     [SerializeField] private AudioSource _uiSource;
+//     private AudioSource bgmSource;
+//     private AudioSource sfxSource;
 
-//     [Header("Audio Mixer")]
-//     [SerializeField] private AudioMixer _audioMixer;
+//     private AudioClip backgroundMusic;
+//     private AudioClip bossMusic;
+//     private AudioClip[] skillSounds = new AudioClip[4];
+//     private AudioClip attackSound;
 
-//     [Header("Volume Parameters")]
-//     [SerializeField] private string _masterVolumeParam = "MasterVolume";
-//     [SerializeField] private string _musicVolumeParam = "MusicVolume";
-//     [SerializeField] private string _sfxVolumeParam = "SFXVolume";
+//     [Header("볼륨 조절")]
+//     [Range(0f, 1f)] public float bgmVolume = 0.7f;
+//     [Range(0f, 1f)] public float sfxVolume = 1.0f;
 
-//     [Header("Fade Settings")]
-//     [SerializeField] private float _musicFadeDuration = 1f;
-
-//     private Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
-//     private Coroutine _musicFadeCoroutine;
-
-//     private void Awake()
+//     void Awake()
 //     {
+//         // 싱글톤 처리
 //         if (Instance == null)
 //         {
 //             Instance = this;
 //             DontDestroyOnLoad(gameObject);
-//             InitializeAudioSources();
+
+//             // AudioSource 준비
+//             bgmSource = gameObject.AddComponent<AudioSource>();
+//             bgmSource.loop = true;
+//             bgmSource.playOnAwake = false;
+
+//             sfxSource = gameObject.AddComponent<AudioSource>();
+//             sfxSource.loop = false;
+//             sfxSource.playOnAwake = false;
+
+//             // 클립들 불러오기 (Resources/Audio/)
+//             backgroundMusic = TryLoadClip("Audio/background_bgm");
+//             bossMusic       = TryLoadClip("Audio/boss_music");
+//             attackSound     = TryLoadClip("Audio/attack");
+//             for (int i = 0; i < 4; i++)
+//                 skillSounds[i] = TryLoadClip($"Audio/skill{i+1}");
 //         }
 //         else
 //         {
@@ -41,183 +50,72 @@
 //         }
 //     }
 
-//     private void InitializeAudioSources()
+//     private AudioClip TryLoadClip(string path)
 //     {
-//         if (_musicSource == null)
-//         {
-//             _musicSource = gameObject.AddComponent<AudioSource>();
-//             _musicSource.outputAudioMixerGroup = _audioMixer?.FindMatchingGroups("Music")[0];
-//             _musicSource.loop = true;
-//         }
-
-//         if (_sfxSource == null)
-//         {
-//             _sfxSource = gameObject.AddComponent<AudioSource>();
-//             _sfxSource.outputAudioMixerGroup = _audioMixer?.FindMatchingGroups("SFX")[0];
-//         }
-
-//         if (_uiSource == null)
-//         {
-//             _uiSource = gameObject.AddComponent<AudioSource>();
-//             _uiSource.outputAudioMixerGroup = _audioMixer?.FindMatchingGroups("UI")[0];
-//         }
+//         AudioClip clip = Resources.Load<AudioClip>(path);
+//         if (clip == null)
+//             Debug.LogWarning($"[AudioManager] {path} 오디오 파일을 찾지 못했습니다.");
+//         return clip;
 //     }
 
-//     #region Music Controls
-//     public void PlayMusic(AudioClip musicClip, bool fade = true)
+//     // 배경음악 재생 또는 전환
+//     public void PlayBackgroundMusic()
 //     {
-//         if (musicClip == null) return;
+//         PlayMusic(backgroundMusic);
+//     }
 
-//         if (_musicSource.isPlaying && _musicSource.clip == musicClip) return;
+//     // 보스 음악 재생 또는 전환
+//     public void PlayBossMusic()
+//     {
+//         PlayMusic(bossMusic);
+//     }
 
-//         if (_musicFadeCoroutine != null)
+//     // 현재 BGM 중지
+//     public void StopBGM()
+//     {
+//         if (bgmSource.isPlaying)
+//             bgmSource.Stop();
+//     }
+
+//     // 기본 공격 사운드 효과음
+//     public void PlayAttackSound()
+//     {
+//         PlaySFX(attackSound);
+//     }
+
+//     // 스킬 효과음 (1~4번, 인덱스 1부터!)
+//     public void PlaySkillSound(int skillNum)
+//     {
+//         if (skillNum < 1 || skillNum > 4)
 //         {
-//             StopCoroutine(_musicFadeCoroutine);
+//             Debug.LogWarning("[AudioManager] 잘못된 스킬 번호입니다 (1~4만 허용)");
+//             return;
 //         }
+//         PlaySFX(skillSounds[skillNum - 1]);
+//     }
 
-//         if (fade)
+//     // 배경음악 재생 (중복 재생 방지)
+//     public void PlayMusic(AudioClip clip)
+//     {
+//         if (clip == null)
 //         {
-//             _musicFadeCoroutine = StartCoroutine(FadeMusic(musicClip, _musicFadeDuration));
+//             Debug.LogWarning("[AudioManager] 배경음악 AudioClip이 없습니다.");
+//             return;
 //         }
+//         if (bgmSource.clip == clip && bgmSource.isPlaying)
+//             return; // 중복 재생 방지
+
+//         bgmSource.clip = clip;
+//         bgmSource.volume = bgmVolume;
+//         bgmSource.Play();
+//     }
+
+//     // 효과음 재생
+//     public void PlaySFX(AudioClip clip)
+//     {
+//         if (clip != null)
+//             sfxSource.PlayOneShot(clip, sfxVolume);
 //         else
-//         {
-//             _musicSource.Stop();
-//             _musicSource.clip = musicClip;
-//             _musicSource.Play();
-//         }
+//             Debug.LogWarning("[AudioManager] 효과음 AudioClip이 없습니다.");
 //     }
-
-//     public void StopMusic(bool fade = true)
-//     {
-//         if (fade)
-//         {
-//             if (_musicFadeCoroutine != null)
-//             {
-//                 StopCoroutine(_musicFadeCoroutine);
-//             }
-//             _musicFadeCoroutine = StartCoroutine(FadeOutMusic(_musicFadeDuration));
-//         }
-//         else
-//         {
-//             _musicSource.Stop();
-//         }
-//     }
-
-//     public void PauseMusic()
-//     {
-//         _musicSource.Pause();
-//     }
-
-//     public void ResumeMusic()
-//     {
-//         _musicSource.UnPause();
-//     }
-//     #endregion
-
-//     #region SFX Controls
-//     public void PlaySFX(AudioClip sfxClip, float volumeScale = 1f)
-//     {
-//         if (sfxClip == null) return;
-//         _sfxSource.PlayOneShot(sfxClip, volumeScale);
-//     }
-
-//     public void PlaySFX(string clipName, float volumeScale = 1f)
-//     {
-//         if (_audioClips.TryGetValue(clipName, out AudioClip clip))
-//         {
-//             _sfxSource.PlayOneShot(clip, volumeScale);
-//         }
-//         else
-//         {
-//             Debug.LogWarning($"SFX clip {clipName} not found!");
-//         }
-//     }
-//     #endregion
-
-//     #region UI Sound Controls
-//     public void PlayUISound(AudioClip uiClip, float volumeScale = 1f)
-//     {
-//         if (uiClip == null) return;
-//         _uiSource.PlayOneShot(uiClip, volumeScale);
-//     }
-//     #endregion
-
-//     #region Volume Controls
-//     public void SetMasterVolume(float volume)
-//     {
-//         SetVolume(_masterVolumeParam, volume);
-//     }
-
-//     public void SetMusicVolume(float volume)
-//     {
-//         SetVolume(_musicVolumeParam, volume);
-//     }
-
-//     public void SetSFXVolume(float volume)
-//     {
-//         SetVolume(_sfxVolumeParam, volume);
-//     }
-
-//     private void SetVolume(string parameter, float value)
-//     {
-//         if (_audioMixer != null)
-//         {
-//             _audioMixer.SetFloat(parameter, Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20);
-//         }
-//     }
-//     #endregion
-
-//     #region Helper Methods
-//     private IEnumerator FadeMusic(AudioClip newClip, float fadeDuration)
-//     {
-//         // Fade out current music
-//         yield return FadeOutMusic(fadeDuration / 2);
-
-//         // Change clip and fade in new music
-//         _musicSource.Stop();
-//         _musicSource.clip = newClip;
-//         _musicSource.Play();
-        
-//         yield return FadeInMusic(fadeDuration / 2);
-//     }
-
-//     private IEnumerator FadeOutMusic(float duration)
-//     {
-//         float startVolume = _musicSource.volume;
-//         float time = 0;
-
-//         while (time < duration)
-//         {
-//             time += Time.deltaTime;
-//             _musicSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
-//             yield return null;
-//         }
-
-//         _musicSource.Stop();
-//         _musicSource.volume = startVolume;
-//     }
-
-//     private IEnumerator FadeInMusic(float duration)
-//     {
-//         float startVolume = 0f;
-//         _musicSource.volume = 0f;
-//         float time = 0;
-
-//         while (time < duration)
-//         {
-//             time += Time.deltaTime;
-//             _musicSource.volume = Mathf.Lerp(startVolume, 1f, time / duration);
-//             yield return null;
-//         }
-//     }
-
-//     public void LoadAudioClips(SerializableDictionary<string, AudioClip> clipsToLoad)
-//     {
-//         _audioClips.Clear();
-//         foreach (var pair in clipsToLoad)
-//         {
-//             _audioClips[pair.Key] = pair.Value;
-//         }
-//     }
-//     #endregion
 // }

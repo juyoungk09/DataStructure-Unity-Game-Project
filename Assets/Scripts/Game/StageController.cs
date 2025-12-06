@@ -11,7 +11,7 @@ public class StageController : MonoBehaviour
     [Header("포탈 프리팹")]
     public GameObject portalPrefab;
 
-    private int currentRound = 0;
+    private int currentRound;
     private GameObject currentPortal; 
 
     void Awake()
@@ -19,11 +19,13 @@ public class StageController : MonoBehaviour
         portals = portalsParent.GetComponentsInChildren<Transform>()
                                .Where(t => t != portalsParent)
                                .ToArray();
+        
     }
 
     void Start()
     {
-        SpawnNextPortal();
+        
+        currentRound = GameManager.Instance.getRound();
     }
 
     // 라운드 종료 시 호출
@@ -34,10 +36,6 @@ public class StageController : MonoBehaviour
         if (currentRound < portals.Length)
         {
             SpawnNextPortal();
-        }
-        else
-        {
-            GoNextStage();
         }
     }
 
@@ -52,13 +50,7 @@ public class StageController : MonoBehaviour
         currentPortal = Instantiate(portalPrefab, spawnPos.position, Quaternion.identity);
 
         var portalComp = currentPortal.GetComponent<Portal>();
-        portalComp.isFinalRoundPortal = isFinal;
         portalComp.stageController = this;
     }
 
-    public void GoNextStage()
-    {
-        int nextStageIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        SceneManager.LoadScene(nextStageIndex);
-    }
 }

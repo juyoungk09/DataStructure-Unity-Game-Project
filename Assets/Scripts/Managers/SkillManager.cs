@@ -91,6 +91,9 @@ public static class SkillManager
             {
                 if (player.activeShields[i] != null)
                 {
+                    float scale = 0.2f; // Adjust the size as needed
+                    player.activeShields[i].transform.localScale = new Vector3(scale, scale, 1f);
+
                     float angle = (Time.time * 100f + i * 120f) % 360f;
                     Vector3 offset = Quaternion.Euler(0, 0, angle) * Vector3.right * 1.5f;
                     player.activeShields[i].transform.position = player.transform.position + offset;

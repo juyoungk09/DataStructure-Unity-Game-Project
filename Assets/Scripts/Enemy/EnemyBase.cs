@@ -11,20 +11,20 @@ public class EnemyBase : MonoBehaviour
     public int attackDamage = 10;     // 공격 데미지
     public float attackCooldown = 1.5f; // 공격 쿨타임
     public float attackDelay = 0.3f;   // 공격 애니메이션 후 데미지 적용까지의 딜레이
-    public LayerMask playerLayer;     // 플레이어 레이어
+    public LayerMask playerLayer;     
     
     [Header("References")]
     public Animator anim;
-    public Transform attackPoint;     // 공격 범위의 중심점
+    public Transform attackPoint;     
     public Slider hpSlider;
     public TMP_Text hpText;
     [Header("Debug")]
-    public bool showGizmos = true;    // 기즈모 표시 여부
+    public bool showGizmos = true;    
     
     [Header("Stats")]
     public int maxHP = 100;
     private Vector3 originalScale;
-    private Transform player;
+    public Transform player;
     private bool isAttacking = false;
     private int currentHP;
     [HideInInspector]
@@ -66,7 +66,7 @@ public class EnemyBase : MonoBehaviour
         player = GameManager.Instance.player.transform;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (player == null) return;
         if (hpSlider != null && hpText != null)
@@ -78,10 +78,14 @@ public class EnemyBase : MonoBehaviour
 
         if (distance <= chaseRange)
         {
-            if (distance <= attackRange)
-                Attack();
-            else
+            if(distance <= attackRange){
+                if (this is not Social) {
+                    Attack();
+                }
+            }
+            else {
                 ChasePlayer();
+            }
         }
         else
         {
@@ -124,7 +128,7 @@ public class EnemyBase : MonoBehaviour
             transform.localScale = new Vector3(Mathf.Sign(dir.x) * originalScale.x, originalScale.y, originalScale.z);
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         if (!isAttacking)
         {
@@ -135,9 +139,13 @@ public class EnemyBase : MonoBehaviour
             Invoke(nameof(DealDamage), attackDelay);
             // 공격 쿨타임
             Invoke(nameof(ResetAttack), attackCooldown);
+            Invoke(nameof(AttackEnd), 0.5f);
         }
     }
-    
+    void AttackEnd()
+    {
+        anim.SetTrigger("AttackEnd");
+    }
     void DealDamage()
     {
         if (player == null) return;
@@ -164,7 +172,7 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
-    void ResetAttack()
+    public void ResetAttack()
     {
         isAttacking = false;
     }
@@ -181,6 +189,7 @@ public class EnemyBase : MonoBehaviour
     public void Die()
     {
         anim.SetTrigger("Die");
+        GameManager.Instance.OnEnemyDead();
         Destroy(gameObject, 0.5f);
     }
 
