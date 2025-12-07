@@ -247,7 +247,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tapie_effect_0: 4703085772181660363
+      tapie_effect_1: -5399648200195194389
+      tapie_effect_2: 6147215410253763758
+      tapie_effect_3: 4565549225545728095
+      tapie_effect_4: 7321536577738922413
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

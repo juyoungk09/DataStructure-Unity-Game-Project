@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pikachu_0: 7551071871341178678
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

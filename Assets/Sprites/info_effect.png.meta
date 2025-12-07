@@ -1247,7 +1247,52 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      info_effect_0: 708302929752255662
+      info_effect_1: -2213868033127564078
+      info_effect_10: -7242539774651848681
+      info_effect_11: 7199823123088149523
+      info_effect_12: -4879528285821054209
+      info_effect_13: 5215850161798712039
+      info_effect_14: 1582280195705719855
+      info_effect_15: 4543714581021361976
+      info_effect_16: 5583201758006647392
+      info_effect_17: 5719293784910966561
+      info_effect_18: 2339279032802499232
+      info_effect_19: 5510294324469882764
+      info_effect_2: 4834336119229926102
+      info_effect_20: 7174537720926919005
+      info_effect_21: 4964036728493504999
+      info_effect_22: 879320943867893912
+      info_effect_23: -1569009798022682950
+      info_effect_24: -1307543243879017318
+      info_effect_25: 6716371057973588000
+      info_effect_26: 7182799881589638997
+      info_effect_27: 7039488314221365172
+      info_effect_28: 4751633976882873470
+      info_effect_29: 6839516037102168882
+      info_effect_3: 211266889355199449
+      info_effect_30: 6369194629068403381
+      info_effect_31: 5400952263602192039
+      info_effect_32: 2992829923713701835
+      info_effect_33: 5444873536816015943
+      info_effect_34: 2040190415074771097
+      info_effect_35: 5051869949405567728
+      info_effect_36: 7341297807261773241
+      info_effect_37: 6178297472567765061
+      info_effect_38: 6406365507769282260
+      info_effect_39: 5736805097558391765
+      info_effect_4: 1363162721770074212
+      info_effect_40: -98077235128812916
+      info_effect_41: -364331517611354949
+      info_effect_42: 8315719359052676821
+      info_effect_43: -5053222125636284314
+      info_effect_44: -6706247019826406082
+      info_effect_5: -6161976259268585037
+      info_effect_6: 5019627589612642898
+      info_effect_7: 7476840299898014710
+      info_effect_8: -4486119552772981699
+      info_effect_9: 1550314159894465430
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -29,7 +29,7 @@ public class EnemyBase : MonoBehaviour
     [HideInInspector]
     protected int currentHP;
     [HideInInspector]
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
     [HideInInspector]
     public Collider2D col;
     [HideInInspector]
