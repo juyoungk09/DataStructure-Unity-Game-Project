@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      talkBubble_0: 4831592178791062626
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

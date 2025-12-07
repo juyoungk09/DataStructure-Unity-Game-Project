@@ -5,9 +5,16 @@
 [Bb]uilds/
 [Ll]ogs/
 UserSettings/
+
+# Visual Studio cache/options
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
 *.csproj
 *.sln
-*.user
 *.unityproj
 *.pidb
 *.booproj

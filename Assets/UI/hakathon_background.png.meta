@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hakathon_background_0: 6549378536337798934
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
