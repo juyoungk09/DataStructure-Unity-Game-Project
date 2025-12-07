@@ -413,7 +413,7 @@ Transform:
   m_GameObject: {fileID: 6847441669050647032}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.151, y: -0.051, z: 0}
+  m_LocalPosition: {x: -0.289, y: -0.044, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -536,6 +536,7 @@ GameObject:
   - component: {fileID: 7994333408666992861}
   - component: {fileID: 3725664165455955720}
   - component: {fileID: 5542637833245844054}
+  - component: {fileID: 5957709579856579242}
   m_Layer: 7
   m_Name: Hackathon
   m_TagString: Untagged
@@ -698,7 +699,7 @@ Animator:
   m_GameObject: {fileID: 8675672533065211008}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fdb80252372e72243ba3e8425d1a9194, type: 2}
+  m_Controller: {fileID: 9100000, guid: bbd5ef70f439070438c3632f4c15bf28, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -710,6 +711,53 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5957709579856579242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8675672533065211008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f747166e83e3cea4281efc08c99b10b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseRange: 12
+  attackRange: 6
+  moveSpeed: 5
+  attackDamage: 10
+  attackCooldown: 1.5
+  attackDelay: 0.3
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  anim: {fileID: 5542637833245844054}
+  attackPoint: {fileID: 1592696553679147523}
+  hpSlider: {fileID: 7089065909822020014}
+  hpText: {fileID: 8757260944395990239}
+  showGizmos: 1
+  maxHP: 100
+  player: {fileID: 0}
+  isAttacking: 0
+  col: {fileID: 0}
+  playerCol: {fileID: 0}
+  lightningPrefab: {fileID: 8237024896924780720, guid: d1a24a4bb4164f240a07222ddd906d21, type: 3}
+  lightningCooldown: 6
+  lightningCount: 5
+  warningDuration: 1
+  strikeRadius: 3
+  warningInterval: 0.2
+  strikeInterval: 0.1
+  targetPredictDistance: 3
+  warningSprite: {fileID: 2027566014926527852, guid: f691194632d9db048a6d403b21115133, type: 3}
+  warningColor: {r: 1, g: 0.85, b: 0.1, a: 0.8}
+  shockwavePrefab: {fileID: 8237024896924780720, guid: 18de78887dc0d884fa41f59a5e79c36b, type: 3}
+  shockwaveCooldown: 8
+  shockwaveWarningDuration: 0.8
+  shockwaveRadius: 5
+  shockwaveDamage: 35
+  shockwaveWarningColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
 --- !u!1 &8849428287667207775
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,6 +96,7 @@ public static class SkillManager
         if (anaSkill1Cooldown > 0) yield break;
         anaSkill1Cooldown = ANASKILL1_CD;
 
+        AudioManager.Instance.PlaySkillSound(1);
         Debug.Log("used AnASkill1 - 뒤로 순간이동 후 공격");
         
         // 1. 가장 가까운 적 찾기
@@ -105,41 +106,51 @@ public static class SkillManager
             LayerMask.GetMask("Enemy")
         );
 
-        if (enemies.Length > 0)
-        {
-            // 가장 가까운 적 찾기
-            Transform nearestEnemy = enemies[0].transform;
-            float minDistance = Vector2.Distance(player.transform.position, nearestEnemy.position);
-            
-            foreach (var enemy in enemies)
-            {
-                float distance = Vector2.Distance(player.transform.position, enemy.transform.position);
-                if (distance < minDistance)
-                {
-                    nearestEnemy = enemy.transform;
-                    minDistance = distance;
-                }
-            }
+        Vector3 originalScale = player.anim.transform.localScale;
+        player.anim.transform.localScale = new Vector3(2, 2, 1);
 
-            // 2. 적의 뒤로 이동 (적의 반대 방향으로 1.5만큼 이동)
-            Vector2 direction = (player.transform.position - nearestEnemy.position).normalized;
-            Vector2 teleportPos = (Vector2)nearestEnemy.position + direction * 1.5f;
-            
-            // 이동 애니메이션 재생
-            player.anim.SetTrigger("AnASkill1");
-            
-            // 3. 순간이동
-            player.transform.position = teleportPos;
-            
-            // 4. 공격 실행
-            yield return new WaitForSeconds(0.2f); // 약간의 딜레이
-            player.StartCoroutine(UseNormalAttack(player));
-        }
-        else
+        try
         {
-            Debug.Log("주변에 적이 없습니다.");
+            if (enemies.Length > 0)
+            {
+                // 가장 가까운 적 찾기
+                Transform nearestEnemy = enemies[0].transform;
+                float minDistance = Vector2.Distance(player.transform.position, nearestEnemy.position);
+                
+                foreach (var enemy in enemies)
+                {
+                    float distance = Vector2.Distance(player.transform.position, enemy.transform.position);
+                    if (distance < minDistance)
+                    {
+                        nearestEnemy = enemy.transform;
+                        minDistance = distance;
+                    }
+                }
+
+                // 2. 적의 뒤로 이동 (적의 반대 방향으로 1.5만큼 이동)
+                Vector2 direction = (player.transform.position - nearestEnemy.position).normalized;
+                Vector2 teleportPos = (Vector2)nearestEnemy.position + direction * 1.5f;
+                
+                // 이동 애니메이션 재생
+                player.anim.SetTrigger("AnASkill1");
+                
+                // 3. 순간이동
+                player.transform.position = teleportPos;
+                
+                // 4. 공격 실행
+                yield return new WaitForSeconds(0.2f); // 약간의 딜레이
+                player.StartCoroutine(UseNormalAttack(player));
+            }
+            else
+            {
+                Debug.Log("주변에 적이 없습니다.");
+            }
         }
-        
+        finally
+        {
+            player.anim.transform.localScale = originalScale;
+        }
+
         yield return null;
     }
 
@@ -151,7 +162,7 @@ public static class SkillManager
         AnimationClip clip = player.anim.runtimeAnimatorController.animationClips
             .FirstOrDefault(c => c.name == "AnASkill2");
         float animLength = clip != null ? clip.length : 1f;
-        Vector3 originalScale = player.transform.localScale;
+        Vector3 originalScale = player.anim.transform.localScale;
         player.anim.transform.localScale = new Vector3(2, 2, 1);
         player.anim.SetTrigger("AnASkill2"); // 1.5배 크기로 증가
         try {
@@ -181,10 +192,11 @@ public static class SkillManager
         if (tapieSkill1Cooldown > 0) yield break;
         tapieSkill1Cooldown = TAPIE_SKILL1_CD;
         Debug.Log("used TapieSkill1");
+        AudioManager.Instance.PlaySkillSound(3);
         AnimationClip clip = player.anim.runtimeAnimatorController.animationClips
             .FirstOrDefault(c => c.name == "TapieSkill1");
         float animLength = clip != null ? clip.length : 1f;
-        Vector3 originalScale = player.transform.localScale;
+        Vector3 originalScale = player.anim.transform.localScale;
         player.anim.transform.localScale = new Vector3(2, 2, 1);
         player.anim.SetTrigger("TapieSkill1"); // 1.5배 크기로 증가
         try {
@@ -250,6 +262,8 @@ public static class SkillManager
 
     public static IEnumerator UseTapieSkill2(Player player) // 랜덤 버프
     {
+        
+        AudioManager.Instance.PlaySkillSound(4);
         if (tapieSkill2Cooldown > 0) yield break;
         tapieSkill2Cooldown = TAPIE_SKILL2_CD;
         Debug.Log("used TapieSkill2");

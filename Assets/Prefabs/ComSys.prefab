@@ -642,7 +642,7 @@ MonoBehaviour:
   hpSlider: {fileID: 7089065909822020014}
   hpText: {fileID: 8757260944395990239}
   showGizmos: 1
-  maxHP: 500
+  maxHP: 1
   player: {fileID: 0}
   isAttacking: 0
   col: {fileID: 0}
@@ -650,8 +650,19 @@ MonoBehaviour:
   orGatePrefab: {fileID: 2227890122675893054, guid: c1eac8b49abeaba44a0f67ca09c6b105, type: 3}
   andGatePrefab: {fileID: 8265669192597200387, guid: b81021097ca71ca41b5b18a47ede40d1, type: 3}
   notGatePrefab: {fileID: 705903827051832245, guid: 1a62c82e2ccfcf04d8a55d25ec64dab7, type: 3}
-  projectileSpeed: 5
+  pulseWavePrefab: {fileID: 1781939583984941012, guid: 5e223b53c4380c64ab8a66ae09e2e492, type: 3}
+  projectileSpeed: 2
   shootPoint: {fileID: 0}
+  pulseWaveCooldown: 7
+  pulseRadius: 4
+  volleyCount: 3
+  volleyDelay: 0.4
+  telegraphDuration: 0.5
+  predictionDistance: 1.5
+  spreadAngle: 8
+  telegraphSprite: {fileID: -3684681138830246548, guid: 6af3edb3dfce3ba4c94d6e3b8b3626d4, type: 3}
+  telegraphColor: {r: 0.3, g: 0.8, b: 1, a: 0.35}
+  telegraphScale: 1.75
 --- !u!61 &7994333408666992861
 BoxCollider2D:
   m_ObjectHideFlags: 0

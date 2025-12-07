@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4889153218797438218}
   - component: {fileID: 3158801630881315229}
   m_Layer: 0
-  m_Name: Lightning
+  m_Name: Lightning 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -894095381526335850, guid: f691194632d9db048a6d403b21115133, type: 3}
+  m_Sprite: {fileID: -4619879911555016802, guid: f691194632d9db048a6d403b21115133, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -4960,3 +4960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef9384e05550bf14681ef9fb67d085a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1.5
+  lifeTime: 0.8
+  shakeDuration: 0.2
+  shakeMagnitude: 0.2

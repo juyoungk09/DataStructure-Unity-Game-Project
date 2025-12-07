@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8237024896924780720
+--- !u!1 &1781939583984941012
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8404146229839874957}
-  - component: {fileID: 152166939803915901}
-  - component: {fileID: 8212546403432114656}
-  - component: {fileID: 4889153218797438218}
-  - component: {fileID: 3158801630881315229}
+  - component: {fileID: 1036951867826015435}
+  - component: {fileID: 2288303951321050090}
+  - component: {fileID: 5593062187209639361}
+  - component: {fileID: 1845842260833998179}
   m_Layer: 0
-  m_Name: Lightning
+  m_Name: pulseWave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8404146229839874957
+--- !u!4 &1036951867826015435
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237024896924780720}
+  m_GameObject: {fileID: 1781939583984941012}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 147.92046, y: -166.30989, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 506.56006, y: -45.42218, z: 0}
+  m_LocalScale: {x: 10, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &152166939803915901
+--- !u!212 &2288303951321050090
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237024896924780720}
+  m_GameObject: {fileID: 1781939583984941012}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -79,33 +78,33 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -894095381526335850, guid: f691194632d9db048a6d403b21115133, type: 3}
+  m_Sprite: {fileID: 5019627589612642898, guid: 60f1140be3f90104cbeac11a9cdd4a20, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.64, y: 1.63}
+  m_Size: {x: 0.12, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!198 &8212546403432114656
+--- !u!198 &5593062187209639361
 ParticleSystem:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237024896924780720}
+  m_GameObject: {fileID: 1781939583984941012}
   serializedVersion: 8
-  lengthInSec: 5
+  lengthInSec: 0.5
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -173,7 +172,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 0.4
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -280,7 +279,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 1}
+      maxColor: {r: 0, g: 0.42196894, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -721,8 +720,8 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
-    angle: 30
+    type: 10
+    angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -866,7 +865,7 @@ ParticleSystem:
           m_RotationOrder: 4
     arc:
       value: 360
-      mode: 0
+      mode: 1
       spread: 0
       speed:
         serializedVersion: 2
@@ -1037,7 +1036,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 50
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1101,19 +1100,19 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
-          time: 0.010296014
-          value: 0.9490446
+          time: 0
+          value: 0
           inSlope: 0
-          outSlope: 0
+          outSlope: 1
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
+          value: 1
           inSlope: 1
-          outSlope: 1
+          outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
@@ -1423,7 +1422,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0, g: 0.40226173, b: 1, a: 1}
+        key0: {r: 0.11006278, g: 0.2551428, b: 1, a: 1}
         key1: {r: 1, g: 1, b: 1, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -4871,14 +4870,14 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!199 &4889153218797438218
+--- !u!199 &1845842260833998179
 ParticleSystemRenderer:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237024896924780720}
+  m_GameObject: {fileID: 1781939583984941012}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -4948,15 +4947,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &3158801630881315229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237024896924780720}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef9384e05550bf14681ef9fb67d085a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

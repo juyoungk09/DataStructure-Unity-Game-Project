@@ -40,6 +40,7 @@
         [HideInInspector] public Rigidbody2D rb;
         [HideInInspector] public Animator anim;
         [HideInInspector] public SpriteRenderer sr;
+        [HideInInspector] public Vector3 animBaseScale;
         [HideInInspector] public int shield = 0;  // 남은 쉴드 수
         [HideInInspector] public GameObject[] activeShields = new GameObject[3]; // 현재 쉴드 오브젝트
         [HideInInspector] public float moveInput;
@@ -56,6 +57,7 @@
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
             sr = GetComponent<SpriteRenderer>();
+            animBaseScale = anim != null ? anim.transform.localScale : Vector3.one;
 
             HP = maxHP;
 
@@ -301,5 +303,13 @@
                     }
                 }
             }
+        }
+
+        public Vector2 GetMoveDirection()
+        {
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+            Vector2 direction = new Vector2(horizontal, vertical);
+            return direction.sqrMagnitude > 1f ? direction.normalized : direction;
         }
     }

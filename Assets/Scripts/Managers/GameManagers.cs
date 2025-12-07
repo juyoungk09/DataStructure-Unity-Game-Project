@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         {4,5,6,0,9},
         {6,5,6,0,1},
         {6,6,6,0,1},
-        {4,7,7,0,9},
+        {7,6,7,0,9},
         {6,7,7,0,1}
     };
     public bool isAnA = false;
@@ -145,6 +145,17 @@ public class GameManager : MonoBehaviour
     public void StageUp() {
         stageCount++;
         Camera.main.GetComponent<CameraController>()?.UpdateCameraPosition();
+        if(stageCount==0) {
+            isNotinCircle = true;
+        }
+        if(stageCount==1) {
+            isNotinCircle = false;
+            canModeChange= true;
+        }
+        if(stageCount==2) {
+            isNotinCircle = false;
+            canModeChange= false;
+        }
         if(stageCount == 5) {
             isNotinCircle = false;
             isAnA=false;

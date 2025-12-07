@@ -7,10 +7,27 @@ public class ComSys : EnemyBase
     public GameObject orGatePrefab;
     public GameObject andGatePrefab;
     public GameObject notGatePrefab;
-    public float projectileSpeed = 5f;
-    public Transform shootPoint;  // Assign this in the inspector to set the spawn point
+    public GameObject pulseWavePrefab;
+    public float projectileSpeed = 6f;
+    public Transform shootPoint;
+    public float pulseWaveCooldown = 7f;
+    public float pulseRadius = 4f;
+
+    [Header("Attack Pattern")]
+    public int volleyCount = 3;
+    public float volleyDelay = 0.4f;
+    public float telegraphDuration = 0.5f;
+    public float predictionDistance = 1.5f;
+    public float spreadAngle = 8f;
+
+    [Header("Telegraph Visuals")]
+    public Sprite telegraphSprite;
+    public Color telegraphColor = new Color(0.3f, 0.8f, 1f, 0.35f);
+    public float telegraphScale = 1.75f;
 
     private float lastAttackTime;
+    private float lastPulseTime;
+    private bool isCastingPulse = false;
 
     protected override void Start()
     {
@@ -39,7 +56,13 @@ public class ComSys : EnemyBase
 
     protected override void Attack()
     {
-        if (!isAttacking)
+        if (!isCastingPulse && Time.time >= lastPulseTime + pulseWaveCooldown)
+        {
+            StartCoroutine(CastPulseWave());
+            return;
+        }
+
+        if (!isAttacking && Time.time - lastAttackTime >= attackCooldown)
         {
             StartCoroutine(AttackRoutine());
         }
@@ -48,59 +71,156 @@ public class ComSys : EnemyBase
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        
-        // Play attack animation
-        if (anim != null)
-        {
-            anim.SetTrigger("Attack");
-            yield return new WaitForSeconds(0.3f); // Wait for attack animation to reach the shooting frame
-        }
+        Player playerComponent = player != null ? player.GetComponent<Player>() : null;
 
-        // Shoot the logic gate
-        if (player != null)
+        for (int i = 0; i < volleyCount; i++)
         {
-            // Choose random logic gate type
+            if (player == null) break;
+
             int gateType = Random.Range(0, 3);
-            GameObject gatePrefab = gateType switch
-            {
-                0 => orGatePrefab,
-                1 => andGatePrefab,
-                _ => notGatePrefab
-            };
-
-            // Determine spawn position
             Vector3 spawnPosition = shootPoint != null ? shootPoint.position : transform.position;
-            
-            // Instantiate the gate projectile
-            GameObject gate = Instantiate(gatePrefab, spawnPosition, Quaternion.identity);
-            Rigidbody2D rb = gate.GetComponent<Rigidbody2D>();
-            LogicGateProjectile gateProjectile = gate.GetComponent<LogicGateProjectile>();
-            
-            if (rb != null && gateProjectile != null)
-            {
-                Vector2 direction = (player.position - spawnPosition).normalized;
-                rb.linearVelocity = direction * projectileSpeed;
-                
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                gate.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                
-                // Set the gate type
-                gateProjectile.gateType = gateType switch
-                {
-                    0 => LogicGateProjectile.GateType.OR,
-                    1 => LogicGateProjectile.GateType.AND,
-                    _ => LogicGateProjectile.GateType.NOT
-                };
-            }
-        }
 
-        // Wait for the rest of the attack animation
-        if (anim != null)
-        {
-            yield return new WaitForSeconds(0.7f);
+            Vector3 predictedTarget = player.position;
+            if (playerComponent != null)
+            {
+                predictedTarget += (Vector3)playerComponent.GetMoveDirection() * predictionDistance;
+            }
+
+            GameObject telegraph = CreateTelegraph(predictedTarget);
+
+            anim?.SetTrigger("Attack");
+            yield return new WaitForSeconds(telegraphDuration);
+
+            if (telegraph != null)
+            {
+                Destroy(telegraph);
+            }
+
+            FireGate(gateType, spawnPosition, predictedTarget);
+
+            if (i < volleyCount - 1)
+            {
+                yield return new WaitForSeconds(volleyDelay);
+            }
         }
 
         isAttacking = false;
         lastAttackTime = Time.time;
+    }
+
+    private GameObject CreateTelegraph(Vector3 position)
+    {
+        if (telegraphSprite == null) return null;
+
+        GameObject telegraph = new GameObject("GateTelegraph");
+        telegraph.transform.position = position;
+        telegraph.transform.localScale = Vector3.one * telegraphScale;
+
+        SpriteRenderer sr = telegraph.AddComponent<SpriteRenderer>();
+        sr.sprite = telegraphSprite;
+        sr.color = telegraphColor;
+        sr.sortingOrder = 20;
+
+        return telegraph;
+    }
+
+    private IEnumerator CastPulseWave()
+    {
+        if (isCastingPulse) yield break;
+
+        isCastingPulse = true;
+        isAttacking = true;
+
+        GameObject pulseTelegraph = CreatePulseTelegraph();
+        anim?.SetTrigger("Attack");
+        yield return new WaitForSeconds(telegraphDuration);
+
+        if (pulseTelegraph != null)
+        {
+            Destroy(pulseTelegraph);
+        }
+
+        if (pulseWavePrefab != null)
+        {
+            GameObject pulseFX = Instantiate(pulseWavePrefab, transform.position, Quaternion.identity);
+            pulseFX.transform.localScale = Vector3.one * (pulseRadius * 2f);
+        }
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, pulseRadius, playerLayer);
+        foreach (var hit in hits)
+        {
+            Player playerHit = hit.GetComponent<Player>();
+            if (playerHit != null)
+            {
+                playerHit.TakeDamage(attackDamage + 10);
+            }
+        }
+
+        lastPulseTime = Time.time;
+        isCastingPulse = false;
+        isAttacking = false;
+    }
+
+    private GameObject CreatePulseTelegraph()
+    {
+        if (telegraphSprite == null) return null;
+
+        GameObject telegraph = new GameObject("PulseTelegraph");
+        telegraph.transform.position = transform.position;
+        telegraph.transform.localScale = Vector3.one * (pulseRadius * 2f);
+
+        SpriteRenderer sr = telegraph.AddComponent<SpriteRenderer>();
+        sr.sprite = telegraphSprite;
+        sr.color = new Color(telegraphColor.r, telegraphColor.g, telegraphColor.b, 0.45f);
+        sr.sortingOrder = 18;
+
+        return telegraph;
+    }
+
+    private void FireGate(int gateType, Vector3 spawnPosition, Vector3 targetPosition)
+    {
+        GameObject prefab = gateType switch
+        {
+            0 => orGatePrefab,
+            1 => andGatePrefab,
+            _ => notGatePrefab
+        };
+
+        if (prefab == null) return;
+
+        GameObject gate = Instantiate(prefab, spawnPosition, Quaternion.identity);
+        Rigidbody2D rb = gate.GetComponent<Rigidbody2D>();
+        LogicGateProjectile gateProjectile = gate.GetComponent<LogicGateProjectile>();
+
+        Vector2 direction = (targetPosition - spawnPosition).normalized;
+        if (direction == Vector2.zero)
+        {
+            direction = Vector2.right * Mathf.Sign(transform.localScale.x);
+        }
+
+        float spread = gateType switch
+        {
+            1 => spreadAngle,
+            2 => spreadAngle * 1.5f,
+            _ => spreadAngle * 0.5f
+        };
+        direction = Quaternion.Euler(0f, 0f, Random.Range(-spread, spread)) * direction;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * projectileSpeed;
+        }
+
+        gate.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+
+        if (gateProjectile != null)
+        {
+            gateProjectile.gateType = gateType switch
+            {
+                0 => LogicGateProjectile.GateType.OR,
+                1 => LogicGateProjectile.GateType.AND,
+                _ => LogicGateProjectile.GateType.NOT
+            };
+        }
     }
 }
