@@ -3,28 +3,68 @@ using System.Collections;
 
 public class Portal : MonoBehaviour
 {
-    public StageController stageController;   // StageController 참조
-    public float teleportDelay = 0.2f;
-
+    
+    [Header("References")]
+    public Transform destination;  // 목적지 위치 (인스펙터에서 설정)
+    public float teleportDelay = 0.5f;
+    
+    [Header("Interaction")]
+    public KeyCode interactKey = KeyCode.F;
+    public float interactionRange = 2f;
+    
+    private bool isPlayerInRange = false;
     private bool isTeleporting = false;
+    private Player player;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void Update()
     {
-        if (!isTeleporting && other.CompareTag("Player"))
+        if (isPlayerInRange && Input.GetKeyDown(interactKey) && !isTeleporting)
         {
-            StartCoroutine(Teleport(other.transform));
+            StartCoroutine(Teleport());
         }
     }
 
-    private IEnumerator Teleport(Transform player)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = true;
+            player = other.GetComponent<Player>();
+            
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isPlayerInRange = false;
+            
+        }
+    }
+
+    private IEnumerator Teleport()
+    {
+        if (player == null || destination == null) yield break;
+        
         isTeleporting = true;
-
-        yield return new WaitForSeconds(teleportDelay);
-
-        // 플레이어 이동: 현재 포탈 위치 → 다음 라운드 위치
-        stageController.EndRound(); // 다음 라운드 포탈 생성
-
+        Debug.Log("player.position: " + player.transform.position + "  destination.position: " + destination.position);
+        
+        player.transform.position = destination.position;
+        
+        GameManager.Instance.StageUp();
+        
         isTeleporting = false;
+    }
+
+    // 에디터에서 목적지 위치 시각화
+    private void OnDrawGizmos()
+    {
+        if (destination != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawLine(transform.position, destination.position);
+            Gizmos.DrawWireSphere(destination.position, 0.5f);
+        }
     }
 }

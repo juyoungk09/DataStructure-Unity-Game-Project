@@ -5,7 +5,9 @@ using System.Linq;
 public class StageController : MonoBehaviour
 {
     [Header("포탈 위치 부모")]
-    public Transform portalsParent;       
+    public Transform portalsParent;
+    public Transform teleportPos;
+    public Transform[] teleportPosArray;
     private Transform[] portals;          
 
     [Header("포탈 프리팹")]
@@ -19,23 +21,26 @@ public class StageController : MonoBehaviour
         portals = portalsParent.GetComponentsInChildren<Transform>()
                                .Where(t => t != portalsParent)
                                .ToArray();
+        teleportPosArray = teleportPos.GetComponentsInChildren<Transform>()
+                                .Where(t => t != teleportPos)
+                                .ToArray();
         
     }
 
     void Start()
     {
         
-        currentRound = GameManager.Instance.getRound();
+        currentRound = GameManager.Instance.stageCount;
     }
 
     // 라운드 종료 시 호출
     public void EndRound()
     {
-        currentRound++;
-
+        Debug.Log("currentRound: " + currentRound + "  portals.Length: " + portals.Length);
         if (currentRound < portals.Length)
         {
             SpawnNextPortal();
+            currentRound++;
         }
     }
 
@@ -50,7 +55,7 @@ public class StageController : MonoBehaviour
         currentPortal = Instantiate(portalPrefab, spawnPos.position, Quaternion.identity);
 
         var portalComp = currentPortal.GetComponent<Portal>();
-        portalComp.stageController = this;
+        portalComp.destination = teleportPosArray[currentRound];
     }
 
 }

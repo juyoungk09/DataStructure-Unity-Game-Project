@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rarity: 0
-  minGold: 10
-  maxGold: 50
+  minGold: 34
+  maxGold: 60
   possibleItems: []
   itemDropChance: 0.5

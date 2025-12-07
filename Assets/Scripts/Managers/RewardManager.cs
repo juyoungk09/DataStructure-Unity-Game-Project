@@ -15,7 +15,7 @@ public class RewardManager : MonoBehaviour
     public void SpawnReward()
     {
         // 현재 스테이지 번호에 맞게 위치 선택
-        int stage = GameManager.Instance.getStage() - 1;
+        int stage = GameManager.Instance.stageCount;
 
         Transform spawnPos = ChestPositionManager.Instance.GetChestPosition(stage);
 

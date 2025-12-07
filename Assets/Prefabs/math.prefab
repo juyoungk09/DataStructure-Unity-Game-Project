@@ -398,7 +398,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef336cd9672486644a0e9d5e4bfc9166, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseRange: 5
+  chaseRange: 7
   attackRange: 1
   moveSpeed: 5
   attackDamage: 10
@@ -413,6 +413,8 @@ MonoBehaviour:
   hpText: {fileID: 3388849863419047222}
   showGizmos: 1
   maxHP: 100
+  player: {fileID: 0}
+  isAttacking: 0
   col: {fileID: 0}
   playerCol: {fileID: 0}
 --- !u!50 &5797128431411427292

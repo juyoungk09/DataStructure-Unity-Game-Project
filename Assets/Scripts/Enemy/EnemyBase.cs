@@ -25,15 +25,16 @@ public class EnemyBase : MonoBehaviour
     public int maxHP = 100;
     private Vector3 originalScale;
     public Transform player;
-    private bool isAttacking = false;
-    private int currentHP;
+    public bool isAttacking = false;
+    [HideInInspector]
+    protected int currentHP;
     [HideInInspector]
     private Rigidbody2D rb;
     [HideInInspector]
     public Collider2D col;
     [HideInInspector]
     public Collider2D playerCol;
-    void Start()
+    protected virtual void Start()
     {
         StartCoroutine(InitPlayer());
 
@@ -87,10 +88,6 @@ public class EnemyBase : MonoBehaviour
                 ChasePlayer();
             }
         }
-        else
-        {
-            anim.SetBool("isMoving", false);
-        }
     }
 
     void OnDrawGizmosSelected()
@@ -122,7 +119,6 @@ public class EnemyBase : MonoBehaviour
         Vector2 dir = (player.position - transform.position).normalized;
         rb.linearVelocity = new Vector2(dir.x * moveSpeed, rb.linearVelocity.y);
 
-        anim.SetBool("isMoving", true);
         
         if (dir.x != 0)
             transform.localScale = new Vector3(Mathf.Sign(dir.x) * originalScale.x, originalScale.y, originalScale.z);
@@ -181,7 +177,8 @@ public class EnemyBase : MonoBehaviour
     {
         currentHP -= amount;
         StartCoroutine(DamageFlash());
-
+        Debug.Log($"{gameObject.name}이(가) {amount}의 데미지를 받음. 현재 체력: {currentHP} -> {currentHP - amount}");
+   
         if (currentHP <= 0)
             Die();
     }

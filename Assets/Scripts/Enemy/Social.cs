@@ -50,6 +50,7 @@ public class Social : EnemyBase
         // 공격 쿨다운 적용
         lastAttackTime = Time.time;
         Invoke(nameof(ResetAttack), attackCooldown);
+        anim.SetTrigger("AttackEnd");
     }
 
 }
