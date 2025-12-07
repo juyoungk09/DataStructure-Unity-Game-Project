@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-[DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
 public class Hackathon : EnemyBase
 {
     [Header("Hackathon Settings")]
@@ -166,18 +165,7 @@ public class Hackathon : EnemyBase
             }
 
             yield return new WaitForSeconds(strikeInterval);
-        }
-<<<<<<< HEAD
-
-=======
-        
-        // Additional EM Wave effect after lightning strikes
-        if (emWavePrefab != null)
-        {
-            Instantiate(emWavePrefab, transform.position, Quaternion.identity);
-        }
-        
->>>>>>> 0ba31f1754cfa5cde35eacd82a55a7ea6268ddf6
+            }
         warningIndicators.Clear();
         lastLightningTime = Time.time;
         isCastingLightning = false;
@@ -250,7 +238,6 @@ public class Hackathon : EnemyBase
         warningIndicators.Clear();
     }
 
-<<<<<<< HEAD
     private void DamagePlayerDirect(Vector2 center, float radius, int damage)
     {
         if (player == null) return;
@@ -264,10 +251,5 @@ public class Hackathon : EnemyBase
                 playerComponent.TakeDamage(damage);
             }
         }
-=======
-    private string GetDebuggerDisplay()
-    {
-        return ToString();
->>>>>>> 0ba31f1754cfa5cde35eacd82a55a7ea6268ddf6
     }
 }

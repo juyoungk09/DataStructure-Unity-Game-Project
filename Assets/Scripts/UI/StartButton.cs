@@ -5,7 +5,7 @@ public class StartButton : MonoBehaviour
 {
     public void LoadRoundOneScene()
     {
-        SceneManager.LoadScene("Round1");
+        SceneManager.LoadScene("Scenes/Round1");
     }
 }
     
